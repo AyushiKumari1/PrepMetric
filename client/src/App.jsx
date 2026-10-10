@@ -14,6 +14,8 @@ import ProgressTracking from "./pages/ProgressTracking";
 import Performance from "./pages/Performance";
 import ReadinessReport from "./pages/ReadinessReport";
 import PreparationPlan from "./pages/PreparationPlan";
+import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 
 import DashboardLayout from "./components/DashboardLayout";
 
@@ -92,6 +94,9 @@ function App() {
                         path="/preparation-plan"
                         element={<PreparationPlan />}
                     />
+
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/profile" element={<Profile />} />
 
                 </Route>
 

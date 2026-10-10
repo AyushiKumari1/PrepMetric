@@ -35,6 +35,9 @@ function ThemeProvider({ children }) {
 
     const value = useMemo(() => ({
         theme,
+        setTheme: (nextTheme) => {
+            if (nextTheme === "light" || nextTheme === "dark") setTheme(nextTheme);
+        },
         toggleTheme: () => setTheme((current) => current === "dark" ? "light" : "dark"),
     }), [theme]);
 

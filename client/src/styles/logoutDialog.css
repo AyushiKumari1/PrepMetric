@@ -1,0 +1,107 @@
+.logout-dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: rgba(3, 7, 18, 0.7);
+    backdrop-filter: blur(2px);
+}
+
+.logout-dialog {
+    --logout-surface: #0d1728;
+    position: relative;
+    width: min(100%, 410px);
+    padding: 35px 30px 24px;
+    overflow: visible;
+    border: 1px solid #293951;
+    border-radius: 10px;
+    background: var(--logout-surface);
+    color: #f1f5f9;
+    text-align: center;
+    box-shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+}
+
+/* A shallow irregular cut gives the panel a paper edge without a large illustration. */
+.logout-dialog::before {
+    position: absolute;
+    top: -5px;
+    right: 12px;
+    left: 12px;
+    height: 8px;
+    background: var(--logout-surface);
+    clip-path: polygon(0 65%, 4% 20%, 8% 62%, 13% 12%, 18% 68%, 23% 24%, 28% 66%, 34% 15%, 39% 62%, 45% 20%, 50% 70%, 56% 18%, 61% 64%, 67% 22%, 72% 67%, 78% 12%, 83% 64%, 89% 20%, 94% 66%, 100% 26%, 100% 100%, 0 100%);
+    content: "";
+}
+
+.logout-dialog-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    background: transparent;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.logout-dialog-close:hover:not(:disabled) { border-color: #293951; background: #111d30; color: #f1f5f9; }
+.logout-dialog-close:focus-visible,
+.logout-dialog-actions button:focus-visible { outline: 2px solid #8b65ff; outline-offset: 2px; }
+
+.logout-dialog-icon {
+    display: grid;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 15px;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(244, 63, 94, 0.12);
+    color: #fb7185;
+}
+
+.logout-dialog h2 { margin: 0; color: #f1f5f9; font-size: 21px; font-weight: 650; letter-spacing: -0.02em; }
+.logout-dialog > p:not(.logout-dialog-error) { max-width: 320px; margin: 9px auto 23px; color: #a3b3cb; font-size: 13px; line-height: 1.6; }
+.logout-dialog-error { margin: -10px 0 16px; color: #fda4af; font-size: 12px; line-height: 1.5; }
+.logout-dialog-actions { display: flex; justify-content: center; gap: 10px; }
+.logout-dialog-actions button { display: inline-flex; min-height: 40px; align-items: center; justify-content: center; gap: 8px; padding: 0 16px; border: 1px solid; border-radius: 7px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: background-color 150ms ease, border-color 150ms ease; }
+.logout-dialog-actions button:disabled,
+.logout-dialog-close:disabled { cursor: not-allowed; opacity: 0.7; }
+.logout-dialog-cancel { border-color: #293951 !important; background: transparent; color: #cbd5e1; }
+.logout-dialog-cancel:hover:not(:disabled) { background: #111d30; border-color: #40516a !important; }
+.logout-dialog-confirm { border-color: #f43f5e !important; background: #e11d48; color: #fff; }
+.logout-dialog-confirm:hover:not(:disabled) { border-color: #e11d48 !important; background: #be123c; }
+.logout-dialog-spinner { animation: logout-spin 900ms linear infinite; }
+@keyframes logout-spin { to { transform: rotate(360deg); } }
+
+.sidebar-logout { width: 100%; border: 0; background: transparent; text-align: left; font: inherit; cursor: pointer; }
+
+html[data-resume-theme="light"] .logout-dialog {
+    --logout-surface: #fff;
+    border-color: #e2e8f0;
+    color: #172033;
+    box-shadow: 0 20px 54px rgba(23, 32, 51, 0.2);
+}
+html[data-resume-theme="light"] .logout-dialog h2 { color: #172033; }
+html[data-resume-theme="light"] .logout-dialog > p:not(.logout-dialog-error) { color: #64748b; }
+html[data-resume-theme="light"] .logout-dialog-close { color: #64748b; }
+html[data-resume-theme="light"] .logout-dialog-close:hover:not(:disabled) { border-color: #e2e8f0; background: #f8fafc; color: #172033; }
+html[data-resume-theme="light"] .logout-dialog-cancel { border-color: #cbd5e1 !important; color: #334155; }
+html[data-resume-theme="light"] .logout-dialog-cancel:hover:not(:disabled) { background: #f8fafc; border-color: #94a3b8 !important; }
+html[data-resume-theme="light"] .logout-dialog-error { color: #be123c; }
+
+@media (max-width: 480px) {
+    .logout-dialog { padding: 33px 20px 20px; }
+    .logout-dialog-actions { flex-direction: column-reverse; }
+    .logout-dialog-actions button { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .logout-dialog-spinner { animation-duration: 1.8s; }
+    .logout-dialog-actions button { transition: none; }
+}

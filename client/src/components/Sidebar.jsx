@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Activity, BarChart3, BookOpen, BriefcaseBusiness, FileText, Gauge, LayoutDashboard, ListChecks, LogOut, MessageSquare, Settings, Target, UserRound } from "lucide-react";
+import { Activity, BarChart3, BookOpen, BriefcaseBusiness, FileText, Gauge, LayoutDashboard, ListChecks, LogOut, MessageSquare, Settings as SettingsIcon, Target, UserRound } from "lucide-react";
 
 const sections = [
     { title: "OVERVIEW", links: [["Dashboard", "/dashboard", LayoutDashboard]] },
@@ -8,20 +8,10 @@ const sections = [
     { title: "PREPARATION PLAN", links: [["Preparation Plan", "/preparation-plan", ListChecks]] },
 ];
 
-function Sidebar() {
+function Sidebar({ onRequestLogout }) {
     const location = useLocation();
-    const redesignedPage = ["/resume-analysis", "/dashboard", "/job-description", "/skill-gap-analysis", "/mock-interviews", "/technical-question", "/behavioral-question", "/progress-tracking", "/performance", "/readiness-report", "/preparation-plan"].includes(location.pathname);
+    const redesignedPage = ["/resume-analysis", "/dashboard", "/job-description", "/skill-gap-analysis", "/mock-interviews", "/technical-question", "/behavioral-question", "/progress-tracking", "/performance", "/readiness-report", "/preparation-plan", "/settings", "/profile"].includes(location.pathname);
     const [mobileOpen, setMobileOpen] = useState(false);
-    const handleLogout = () => {
-        try {
-            localStorage.removeItem("token");
-            localStorage.removeItem("username");
-            localStorage.removeItem("email");
-        } catch {
-            // Navigation still returns to login if storage is unavailable.
-        }
-        setMobileOpen(false);
-    };
     return <>
         {redesignedPage && <button type="button" className={`resume-nav-backdrop ${mobileOpen ? "open" : ""}`} aria-label="Close navigation" onClick={() => setMobileOpen(false)}/>}
         {redesignedPage && <button type="button" className="resume-mobile-menu" aria-label="Open navigation" onClick={() => setMobileOpen(true)}><span/><span/><span/></button>}
@@ -34,9 +24,9 @@ function Sidebar() {
             </div>)}
             <div className="sidebar-section">
                 <p className="sidebar-title">ACCOUNT</p>
-                <div className="sidebar-item" aria-disabled="true"><UserRound size={16}/><span>Profile</span></div>
-                <div className="sidebar-item" aria-disabled="true"><Settings size={16}/><span>Settings</span></div>
-                <NavLink to="/login" onClick={handleLogout} className="sidebar-item"><LogOut size={16}/><span>Logout</span></NavLink>
+                <NavLink to="/profile" onClick={() => setMobileOpen(false)} className={({ isActive }) => `sidebar-item ${isActive ? "active" : ""}`}><UserRound size={16}/><span>Profile</span></NavLink>
+                <NavLink to="/settings" onClick={() => setMobileOpen(false)} className={({ isActive }) => `sidebar-item ${isActive ? "active" : ""}`}><SettingsIcon size={16}/><span>Settings</span></NavLink>
+                <button type="button" onClick={onRequestLogout} className="sidebar-item sidebar-logout"><LogOut size={16}/><span>Logout</span></button>
             </div>
         </nav>
         </aside>

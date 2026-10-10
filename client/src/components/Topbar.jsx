@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { Bell, Check, ChevronDown, Moon, Sun, X } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { Activity, Bell, Check, ChevronDown, LogOut, Moon, Settings as SettingsIcon, Sun, UserRound, X } from "lucide-react";
 import { useTheme } from "../context/useTheme";
 import "../styles/topbar.css";
 
@@ -16,6 +16,8 @@ const pageTitles = {
     "/performance": "Performance",
     "/readiness-report": "Readiness Report",
     "/preparation-plan": "Preparation Plan",
+    "/settings": "Settings",
+    "/profile": "Profile",
 };
 
 function safeStorageValue(key, fallback) {
@@ -26,9 +28,9 @@ function safeStorageValue(key, fallback) {
     }
 }
 
-function Topbar() {
+function Topbar({ onRequestLogout, logoutDialogOpen }) {
     const location = useLocation();
-    const { theme, toggleTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
     const [openPanel, setOpenPanel] = useState(null);
     const [planOpen, setPlanOpen] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -36,21 +38,23 @@ function Topbar() {
     const planDialogRef = useRef(null);
     const planCloseRef = useRef(null);
     const notificationPanelRef = useRef(null);
+    const userMenuRef = useRef(null);
     const lastTriggerRef = useRef(null);
-    const userName = safeStorageValue("username", "User");
-    const email = safeStorageValue("email", "PrepMetric member");
+    const userName = safeStorageValue("username", "Signed-in account");
+    const email = safeStorageValue("email", "Email unavailable");
     const pageTitle = pageTitles[location.pathname] || "Dashboard";
 
     useEffect(() => {
         if (!openPanel && !planOpen && !userMenuOpen) return undefined;
         const handlePointerDown = (event) => {
-            if (topbarRef.current && !topbarRef.current.contains(event.target)) {
+            if (!logoutDialogOpen && topbarRef.current && !topbarRef.current.contains(event.target)) {
                 setOpenPanel(null);
                 setUserMenuOpen(false);
             }
         };
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
+                if (logoutDialogOpen) return;
                 setOpenPanel(null);
                 setUserMenuOpen(false);
                 setPlanOpen(false);
@@ -63,7 +67,7 @@ function Topbar() {
             document.removeEventListener("pointerdown", handlePointerDown);
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [openPanel, planOpen, userMenuOpen]);
+    }, [openPanel, planOpen, userMenuOpen, logoutDialogOpen]);
 
     useEffect(() => {
         if (planOpen) planCloseRef.current?.focus();
@@ -72,6 +76,10 @@ function Topbar() {
     useEffect(() => {
         if (openPanel === "notifications") notificationPanelRef.current?.focus();
     }, [openPanel]);
+
+    useEffect(() => {
+        if (userMenuOpen) userMenuRef.current?.querySelector("a")?.focus();
+    }, [userMenuOpen]);
 
     const handlePlanDialogKeyDown = (event) => {
         if (event.key !== "Tab") return;
@@ -106,12 +114,14 @@ function Topbar() {
         setOpenPanel(null);
         setUserMenuOpen((current) => !current);
     };
-
     return <>
         <header className="topbar resume-topbar">
             <div className="topbar-left"><h2>{pageTitle}</h2></div>
             <div className="topbar-right" ref={topbarRef}>
-                <button className="resume-header-theme" type="button" onClick={toggleTheme} aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`} title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}>{theme === "dark" ? <Sun size={16}/> : <Moon size={16}/>}<span>{theme === "dark" ? "Light" : "Dark"}</span></button>
+                <div className="header-theme-switch" role="group" aria-label="Color theme">
+                    <button type="button" className={theme === "light" ? "selected" : ""} aria-pressed={theme === "light"} aria-label="Use light theme" onClick={() => setTheme("light")}><Sun size={14}/><span>Light</span></button>
+                    <button type="button" className={theme === "dark" ? "selected" : ""} aria-pressed={theme === "dark"} aria-label="Use dark theme" onClick={() => setTheme("dark")}><Moon size={14}/><span>Dark</span></button>
+                </div>
                 <button className="plan-button" type="button" aria-haspopup="dialog" aria-expanded={planOpen} aria-controls="plan-details-dialog" onClick={openPlanDetails}>Free Plan</button>
                 <div className="header-popover-wrap">
                     <button className="notification-button" type="button" aria-label="Notifications" aria-haspopup="dialog" aria-expanded={openPanel === "notifications"} aria-controls="notification-panel" onClick={toggleNotifications}><Bell size={17}/></button>
@@ -121,12 +131,20 @@ function Topbar() {
                     </section>}
                 </div>
                 <div className="user-menu-wrap">
-                    <button className="user-profile" type="button" onClick={toggleUserMenu} aria-expanded={userMenuOpen} aria-haspopup="menu">
-                        <div className="user-avatar">{userName.slice(0, 1).toUpperCase()}</div>
-                        <div className="user-info"><span className="user-name">{userName}</span><span className="user-email">{email}</span></div>
+                    <button className="user-profile" type="button" onClick={toggleUserMenu} aria-expanded={userMenuOpen} aria-haspopup="dialog" aria-controls="account-dropdown" aria-label={`Open account menu for ${userName}`}>
+                        <div className="user-avatar"><Activity size={16}/></div>
+                        <div className="user-info"><span className="user-name">PREPMETRIC</span><span className="user-email">Team workspace</span></div>
                         <ChevronDown className="user-chevron" size={15}/>
                     </button>
-                    {userMenuOpen && <div className="user-profile-menu" role="dialog" aria-label="Account details"><strong>{userName}</strong><span>{email}</span><small>Account</small><p>Profile and settings routes are not connected yet.</p></div>}
+                    {userMenuOpen && <section className="user-profile-menu" id="account-dropdown" role="dialog" aria-label="Workspace and account menu" ref={userMenuRef}>
+                        <div className="account-dropdown-workspace"><span className="account-dropdown-avatar"><Activity size={15}/></span><div><strong>PREPMETRIC</strong><span>Team workspace</span></div></div>
+                        <div className="account-dropdown-user"><strong>{userName}</strong><span>{email}</span></div>
+                        <nav className="account-dropdown-actions" aria-label="Account actions">
+                            <Link to="/profile" onClick={() => setUserMenuOpen(false)}><UserRound size={15}/><span>Profile</span></Link>
+                            <Link to="/settings" onClick={() => setUserMenuOpen(false)}><SettingsIcon size={15}/><span>Settings</span></Link>
+                            <button type="button" className="account-dropdown-logout" onClick={onRequestLogout}><LogOut size={15}/><span>Log out</span></button>
+                        </nav>
+                    </section>}
                 </div>
             </div>
         </header>

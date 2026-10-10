@@ -6,6 +6,14 @@ import {
 import "../styles/technicalQuestion.css";
 
 const topics = ["All Topics", "JavaScript", "React", "Node.js", "MongoDB", "Data Structures", "System Design"];
+function getDefaultDifficulty() {
+    try {
+        const value = localStorage.getItem("prepmetric-default-difficulty");
+        return ["Easy", "Medium", "Hard"].includes(value) ? value : "Medium";
+    } catch {
+        return "Medium";
+    }
+}
 const recommendations = [
     { topic: "System Design", description: "Practice architecture patterns, scalability, and system trade-offs.", Icon: Database, color: "purple" },
     { topic: "Data Structures", description: "Review algorithms, complexity, and common data structures.", Icon: Network, color: "blue" },
@@ -21,7 +29,7 @@ function RecommendationCard({ topic, description, Icon, color, onSelect }) {
 }
 
 function TechnicalQuestion() {
-    const [difficulty, setDifficulty] = useState("Medium");
+    const [difficulty, setDifficulty] = useState(getDefaultDifficulty);
     const [topic, setTopic] = useState("All Topics");
     const [message, setMessage] = useState("");
     const practiceRef = useRef(null);

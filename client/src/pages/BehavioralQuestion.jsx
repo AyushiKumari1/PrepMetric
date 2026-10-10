@@ -6,6 +6,14 @@ import {
 import "../styles/behavioralQuestion.css";
 
 const focuses = ["Mixed", "Teamwork", "Leadership", "Communication", "Problem Solving", "Conflict Management"];
+function getDefaultDifficulty() {
+    try {
+        const value = localStorage.getItem("prepmetric-default-difficulty");
+        return ["Easy", "Medium", "Hard"].includes(value) ? value : "Medium";
+    } catch {
+        return "Medium";
+    }
+}
 const skills = ["Communication", "Teamwork", "Problem Solving", "Leadership", "Conflict Management"];
 const recommendations = [
     { topic: "Conflict Management", description: "Practice explaining how you handle disagreements and difficult workplace situations.", Icon: Users, color: "purple" },
@@ -34,7 +42,7 @@ function SectionHeading({ Icon, title, description }) {
 }
 
 function BehavioralQuestion() {
-    const [difficulty, setDifficulty] = useState("Medium");
+    const [difficulty, setDifficulty] = useState(getDefaultDifficulty);
     const [focus, setFocus] = useState("Mixed");
     const [message, setMessage] = useState("");
     const practiceRef = useRef(null);

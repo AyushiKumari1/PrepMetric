@@ -39,6 +39,23 @@ html {
 
 html[data-resume-theme="light"] {
     color-scheme: light;
+    --bg-primary: #F5F7FB;
+    --bg-secondary: #F8FAFC;
+    --bg-sidebar: #FFFFFF;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F8FAFC;
+    --border: #E2E8F0;
+    --border-light: #CBD5E1;
+    --text-primary: #172033;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --purple: #6D3DE8;
+    --purple-light: #5B2ED0;
+    --blue: #0284C7;
+    --green: #16A34A;
+    --yellow: #B77908;
+    --red: #DC2626;
+    --shadow: rgba(23, 32, 51, 0.12);
 }
 
 html[data-resume-theme="dark"] {
@@ -130,6 +147,7 @@ textarea::placeholder {
 }
 
 body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) { background: #070b14; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) { background: #f5f7fb; color: #172033; }
 body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .app-layout,
 body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .main-area,
 body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .page-content { background: var(--bg-primary); color: var(--text-primary); }
