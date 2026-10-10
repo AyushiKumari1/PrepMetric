@@ -1,561 +1,118 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import {
+    AlertCircle, ArrowDownToLine, ArrowRight, Award, BarChart3, CheckCircle2,
+    Code2, FileText, Lightbulb,
+    ListChecks, MessageSquareText, RotateCcw, Target, UsersRound,
+} from "lucide-react";
 import "../styles/readinessReport.css";
 
+const categoryReadiness = [
+    { label: "Resume & Profile", Icon: FileText, color: "blue" },
+    { label: "Technical Skills", Icon: Code2, color: "purple" },
+    { label: "Behavioral Skills", Icon: UsersRound, color: "green" },
+    { label: "Skill Gap Analysis", Icon: Target, color: "amber" },
+];
+const readinessStages = ["Beginner", "Developing", "Good", "Excellent"];
+const skillDimensions = ["Technical Knowledge", "Communication", "Problem Solving", "Leadership", "Confidence", "Resume & Profile"];
+const nextStepItems = [
+    { title: "Practice behavioral questions", description: "Work through teamwork, leadership, and communication prompts.", to: "/behavioral-question", Icon: UsersRound, color: "purple" },
+    { title: "Review technical topics", description: "Choose a topic and difficulty for technical practice.", to: "/technical-question", Icon: Code2, color: "blue" },
+    { title: "Try a mock interview", description: "Explore the available interview practice modes.", to: "/mock-interviews", Icon: MessageSquareText, color: "green" },
+    { title: "Review your resume", description: "Upload a resume to view the analysis supported by the app.", to: "/resume-analysis", Icon: FileText, color: "amber" },
+];
+
+function PanelHeading({ Icon, title, description }) {
+    return <div className="readiness-panel-heading">
+        <span className="readiness-panel-icon"><Icon size={17}/></span>
+        <div><h2>{title}</h2><p>{description}</p></div>
+    </div>;
+}
+
+function EmptyState({ title, description, Icon = AlertCircle }) {
+    return <div className="readiness-empty-state"><span><Icon size={18}/></span><strong>{title}</strong><p>{description}</p></div>;
+}
+
 function ReadinessReport() {
-    return (
-        <div className="page-container">
+    const [actionMessage, setActionMessage] = useState("");
 
-            {/* Page Header */}
-
-            <div className="page-header">
-                <h1>Readiness Report</h1>
-
-                <p>
-                    Get a complete overview of your interview preparation
-                    and understand where you are ready and where you need
-                    more practice.
-                </p>
+    return <div className="page-container readiness-report-page">
+        <header className="readiness-page-header">
+            <div><h1>Readiness Report</h1><p>Get a complete analysis of your interview readiness with personalized insights and recommendations.</p></div>
+            <div className="readiness-header-actions">
+                <button type="button" className="readiness-button secondary" onClick={() => setActionMessage("Report download is not available because this prototype does not yet generate readiness reports.")}><ArrowDownToLine size={15}/>Download Report</button>
+                <button type="button" className="readiness-button primary" onClick={() => setActionMessage("Readiness assessment retakes are not connected yet. Use the practice modules below to continue preparing.")}><RotateCcw size={15}/>Retake Assessment</button>
             </div>
+        </header>
+        {actionMessage && <p className="readiness-action-message" role="status">{actionMessage}</p>}
 
-
-            {/* Overall Readiness */}
-
-            <section className="readiness-overview-card">
-
-                <div className="readiness-overview-content">
-
-                    <div>
-                        <span className="readiness-label">
-                            Overall Interview Readiness
-                        </span>
-
-                        <strong className="readiness-score">
-                            78%
-                        </strong>
-
-                        <p>
-                            Your current preparation shows good progress
-                            toward your target role.
-                        </p>
+        <section className="readiness-summary-grid" aria-label="Readiness summary">
+            <article className="readiness-panel readiness-overall-card">
+                <div className="readiness-overall-layout">
+                    <div className="readiness-score-ring" aria-label="Overall readiness not yet available"><div><strong>—</strong><span>Overall</span></div></div>
+                    <div className="readiness-overall-copy">
+                        <span className="readiness-eyebrow">Overall Readiness</span><h2>Your Interview Readiness</h2>
+                        <span className="readiness-level-pending">Assessment needed</span>
+                        <p>Complete an assessment to calculate your readiness and receive a report tailored to your results.</p>
+                        <small><AlertCircle size={13}/> No readiness assessment data is available yet.</small>
                     </div>
-
-
-                    <div className="readiness-status">
-                        <strong>
-                            Good Progress
-                        </strong>
-
-                        <span>
-                            Keep practicing to improve your readiness.
-                        </span>
-                    </div>
-
                 </div>
+            </article>
 
+            <article className="readiness-panel readiness-category-card">
+                <PanelHeading Icon={BarChart3} title="Category Readiness" description="Readiness across key preparation areas."/>
+                <div className="readiness-category-list">{categoryReadiness.map(({ label, Icon, color }) => <div className="readiness-category-row" key={label}>
+                    <span className={`readiness-category-icon ${color}`}><Icon size={14}/></span><span className="readiness-category-name">{label}</span>
+                    <div className="readiness-category-track" role="progressbar" aria-label={`${label}: not enough data yet`} aria-valuemin="0" aria-valuemax="100" aria-valuetext="Not enough data yet"><span style={{ width: 0 }}/></div><strong>—</strong>
+                </div>)}</div>
+                <small className="readiness-data-caption">Not enough data yet</small>
+            </article>
 
-                <div className="readiness-progress-bar">
-
-                    <div
-                        className="readiness-progress-fill"
-                        style={{ width: "78%" }}
-                    ></div>
-
+            <article className="readiness-panel readiness-level-card">
+                <PanelHeading Icon={Award} title="Readiness Level" description="Current assessment stage."/>
+                <div className="readiness-current-level"><span>Your Level</span><strong>Not assessed</strong></div>
+                <div className="readiness-stage-chart" aria-label="Readiness level thresholds are not defined">
+                    {readinessStages.map((stage) => <div className="readiness-stage" key={stage}><span className="readiness-stage-bar"/><small>{stage}</small></div>)}
                 </div>
+                <p className="readiness-data-caption">Level classification requires an assessment and defined thresholds.</p>
+            </article>
+        </section>
 
+        <div className="readiness-middle-grid">
+            <section className="readiness-panel readiness-radar-panel">
+                <PanelHeading Icon={Target} title="Skill-wise Readiness Radar" description="Compare your readiness across key skill areas."/>
+                <div className="readiness-chart-placeholder">
+                    <EmptyState title="Assessment results are needed" description={`The radar will show evaluated skill scores for ${skillDimensions.join(", ")}.`} Icon={Target}/>
+                </div>
             </section>
 
-
-            {/* Readiness Statistics */}
-
-            <section className="readiness-stats-grid">
-
-                <div className="readiness-stat-card">
-
-                    <span>
-                        Resume Readiness
-                    </span>
-
-                    <strong>
-                        78%
-                    </strong>
-
-                    <small>
-                        Resume quality and relevance
-                    </small>
-
+            <section className="readiness-panel readiness-strength-panel">
+                <PanelHeading Icon={Target} title="Strengths & Areas for Improvement" description="Identify strong areas and focus on improving weaker areas."/>
+                <div className="readiness-strength-grid">
+                    <div className="readiness-strength-box positive"><h3><CheckCircle2 size={15}/>Your Strengths</h3><EmptyState title="Not enough data yet" description="Strengths will be identified from assessment results."/></div>
+                    <div className="readiness-strength-box focus"><h3><AlertCircle size={15}/>Areas to Improve</h3><EmptyState title="Not enough data yet" description="Focus areas will be based on actual skill scores."/></div>
                 </div>
-
-
-                <div className="readiness-stat-card">
-
-                    <span>
-                        Skill Match
-                    </span>
-
-                    <strong>
-                        72%
-                    </strong>
-
-                    <small>
-                        Match with target role
-                    </small>
-
-                </div>
-
-
-                <div className="readiness-stat-card">
-
-                    <span>
-                        Technical Readiness
-                    </span>
-
-                    <strong>
-                        76%
-                    </strong>
-
-                    <small>
-                        Technical preparation
-                    </small>
-
-                </div>
-
-
-                <div className="readiness-stat-card">
-
-                    <span>
-                        Behavioral Readiness
-                    </span>
-
-                    <strong>
-                        81%
-                    </strong>
-
-                    <small>
-                        Behavioral preparation
-                    </small>
-
-                </div>
-
             </section>
-
-
-            {/* Readiness Breakdown */}
-
-            <section className="readiness-section-card">
-
-                <div className="readiness-section-header">
-
-                    <h2>
-                        Readiness Breakdown
-                    </h2>
-
-                    <p>
-                        Review your preparation across the major interview areas.
-                    </p>
-
-                </div>
-
-
-                <div className="readiness-breakdown-list">
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Resume
-                            </strong>
-
-                            <span>
-                                78%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "78%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Job Description Understanding
-                            </strong>
-
-                            <span>
-                                80%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "80%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Skill Match
-                            </strong>
-
-                            <span>
-                                72%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "72%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Technical Questions
-                            </strong>
-
-                            <span>
-                                76%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "76%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Behavioral Questions
-                            </strong>
-
-                            <span>
-                                81%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "81%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-breakdown-item">
-
-                        <div className="readiness-breakdown-info">
-
-                            <strong>
-                                Mock Interview Performance
-                            </strong>
-
-                            <span>
-                                78%
-                            </span>
-
-                        </div>
-
-                        <div className="readiness-breakdown-bar">
-
-                            <div style={{ width: "78%" }}></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Strengths and Improvements */}
-
-            <section className="readiness-two-column">
-
-                <div className="readiness-section-card">
-
-                    <div className="readiness-section-header">
-
-                        <h2>
-                            Your Strengths
-                        </h2>
-
-                        <p>
-                            Areas where your preparation is currently strong.
-                        </p>
-
-                    </div>
-
-
-                    <div className="readiness-list">
-
-                        <div>
-                            ✓ Strong communication skills
-                        </div>
-
-                        <div>
-                            ✓ Good behavioral interview performance
-                        </div>
-
-                        <div>
-                            ✓ Solid technical fundamentals
-                        </div>
-
-                        <div>
-                            ✓ Relevant project experience
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div className="readiness-section-card">
-
-                    <div className="readiness-section-header">
-
-                        <h2>
-                            Focus Areas
-                        </h2>
-
-                        <p>
-                            Areas that could benefit from additional preparation.
-                        </p>
-
-                    </div>
-
-
-                    <div className="readiness-list">
-
-                        <div>
-                            ⚠ System design
-                        </div>
-
-                        <div>
-                            ⚠ Advanced technical concepts
-                        </div>
-
-                        <div>
-                            ⚠ Problem-solving speed
-                        </div>
-
-                        <div>
-                            ⚠ Skill gaps for target role
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Interview Readiness */}
-
-            <section className="readiness-section-card">
-
-                <div className="readiness-section-header">
-
-                    <h2>
-                        Interview Readiness
-                    </h2>
-
-                    <p>
-                        Summary of your current interview preparation.
-                    </p>
-
-                </div>
-
-
-                <div className="readiness-summary-grid">
-
-                    <div className="readiness-summary-item">
-
-                        <span>
-                            Technical
-                        </span>
-
-                        <strong>
-                            76%
-                        </strong>
-
-                        <small>
-                            Good foundation
-                        </small>
-
-                    </div>
-
-
-                    <div className="readiness-summary-item">
-
-                        <span>
-                            Behavioral
-                        </span>
-
-                        <strong>
-                            81%
-                        </strong>
-
-                        <small>
-                            Strong preparation
-                        </small>
-
-                    </div>
-
-
-                    <div className="readiness-summary-item">
-
-                        <span>
-                            Communication
-                        </span>
-
-                        <strong>
-                            84%
-                        </strong>
-
-                        <small>
-                            Strong performance
-                        </small>
-
-                    </div>
-
-
-                    <div className="readiness-summary-item">
-
-                        <span>
-                            Confidence
-                        </span>
-
-                        <strong>
-                            75%
-                        </strong>
-
-                        <small>
-                            Needs more practice
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Final Recommendations */}
-
-            <section className="readiness-section-card">
-
-                <div className="readiness-section-header">
-
-                    <h2>
-                        Final Recommendations
-                    </h2>
-
-                    <p>
-                        Follow these steps to continue improving your interview readiness.
-                    </p>
-
-                </div>
-
-
-                <div className="readiness-recommendation-list">
-
-                    <div className="readiness-recommendation">
-
-                        <div className="recommendation-number">
-                            1
-                        </div>
-
-                        <div>
-                            <strong>
-                                Practice System Design
-                            </strong>
-
-                            <span>
-                                Focus on architecture, scalability,
-                                databases, and system design concepts.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-recommendation">
-
-                        <div className="recommendation-number">
-                            2
-                        </div>
-
-                        <div>
-                            <strong>
-                                Close Your Skill Gaps
-                            </strong>
-
-                            <span>
-                                Work on the missing skills identified
-                                for your target role.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div className="readiness-recommendation">
-
-                        <div className="recommendation-number">
-                            3
-                        </div>
-
-                        <div>
-                            <strong>
-                                Complete More Mock Interviews
-                            </strong>
-
-                            <span>
-                                Practice realistic interviews to improve
-                                confidence and response quality.
-                            </span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
         </div>
-    );
+
+        <div className="readiness-bottom-grid">
+            <section className="readiness-panel">
+                <PanelHeading Icon={Lightbulb} title="Personalized Recommendations" description="Recommendations will be based on your assessment results."/>
+                <EmptyState title="Complete an assessment to get recommendations" description="This prototype does not yet generate personalized recommendation data." Icon={Lightbulb}/>
+                <Link className="readiness-inline-link" to="/mock-interviews">Explore practice modules <ArrowRight size={14}/></Link>
+            </section>
+
+            <section className="readiness-panel readiness-next-steps">
+                <PanelHeading Icon={ListChecks} title="Next Steps" description="Suggested modules to explore; these are not assessment-generated."/>
+                <div className="readiness-steps-list">{nextStepItems.map(({ title, description, to, Icon, color }, index) => <div className="readiness-step" key={title}>
+                    <span className="readiness-step-number">{index + 1}</span>
+                    <span className={`readiness-step-icon ${color}`}><Icon size={15}/></span>
+                    <div className="readiness-step-copy"><strong>{title}</strong><p>{description}</p></div>
+                    <Link to={to} aria-label={`Open ${title}`}><ArrowRight size={15}/></Link>
+                </div>)}</div>
+            </section>
+        </div>
+    </div>;
 }
 
 export default ReadinessReport;

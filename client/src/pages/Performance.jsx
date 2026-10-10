@@ -1,559 +1,108 @@
+import { useState } from "react";
+import {
+    AlertCircle, Award, BarChart3, Brain, Clock3, Code2, FileText,
+    PieChart, Target,
+} from "lucide-react";
 import "../styles/performance.css";
 
+const metricCards = [
+    { label: "Overall Score", Icon: Award, color: "purple" },
+    { label: "Resume Analysis", Icon: FileText, color: "blue" },
+    { label: "Technical Practice", Icon: Code2, color: "green" },
+    { label: "Behavioral Practice", Icon: Brain, color: "amber" },
+];
+const categories = ["Technical", "Behavioral", "Resume", "Skill Gap"];
+const tableColumns = {
+    Technical: ["Topic", "Questions Attempted", "Correct", "Accuracy"],
+    Behavioral: ["Area", "Responses", "Evaluated", "Score"],
+    Resume: ["Criterion", "Reviewed", "Met", "Score"],
+    "Skill Gap": ["Skill", "Requirements", "Matched", "Match"],
+};
+
+function EmptyState({ title, description }) {
+    return <div className="performance-empty-state">
+        <span><AlertCircle size={18}/></span><strong>{title}</strong><p>{description}</p>
+    </div>;
+}
+
+function MetricCard({ label, Icon, color }) {
+    return <article className="performance-metric-card">
+        <div className="performance-metric-heading"><span className={`performance-icon-tile ${color}`}><Icon size={17}/></span><span>{label}</span></div>
+        <strong className="performance-metric-value">—</strong>
+        <div className="performance-metric-track" role="progressbar" aria-label={`${label} unavailable`} aria-valuemin="0" aria-valuemax="100" aria-valuetext="No performance data yet"><span style={{ width: 0 }}/></div>
+        <small>No recorded score yet</small>
+    </article>;
+}
+
+function PanelHeading({ Icon, title, description, action }) {
+    return <div className="performance-panel-heading">
+        <span className="performance-panel-icon"><Icon size={17}/></span>
+        <div className="performance-heading-copy"><h2>{title}</h2><p>{description}</p></div>
+        {action}
+    </div>;
+}
+
 function Performance() {
-    return (
-        <div className="page-container">
+    const [period, setPeriod] = useState("Last 8 Weeks");
+    const [activeCategory, setActiveCategory] = useState("Technical");
+    const columns = tableColumns[activeCategory];
 
-            {/* Page Header */}
+    return <div className="page-container performance-page">
+        <header className="page-header performance-page-header">
+            <h1>Performance</h1>
+            <p>Analyze your interview preparation performance and identify areas for improvement.</p>
+        </header>
 
-            <div className="page-header">
-                <h1>Performance</h1>
+        <section className="performance-metrics-grid" aria-label="Performance summary">
+            {metricCards.map(({ label, Icon, color }) => <MetricCard key={label} label={label} Icon={Icon} color={color}/>)}
+        </section>
 
-                <p>
-                    Review your interview performance and identify areas
-                    where you can improve.
-                </p>
-            </div>
-
-
-            {/* Overall Performance */}
-
-            <section className="performance-overview-card">
-
-                <div className="performance-overview-content">
-
-                    <div>
-                        <span className="performance-label">
-                            Overall Performance
-                        </span>
-
-                        <strong className="performance-score">
-                            78%
-                        </strong>
-
-                        <p>
-                            Your average performance across interview practice.
-                        </p>
-                    </div>
-
-
-                    <div className="performance-summary">
-
-                        <div>
-                            <span>
-                                Previous Score
-                            </span>
-
-                            <strong>
-                                72%
-                            </strong>
-                        </div>
-
-                        <div>
-                            <span>
-                                Improvement
-                            </span>
-
-                            <strong>
-                                +6%
-                            </strong>
-                        </div>
-
-                    </div>
-
-                </div>
-
+        <div className="performance-charts-grid">
+            <section className="performance-panel">
+                <PanelHeading Icon={BarChart3} title="Performance Trends" description="Track your improvement over time across different areas."
+                    action={<label className="performance-period"><span className="performance-sr-only">Chart period</span><select value={period} onChange={(event) => setPeriod(event.target.value)}><option>Last 8 Weeks</option><option>Last 4 Weeks</option><option>Last 12 Weeks</option></select></label>}/>
+                <div className="performance-chart-empty"><EmptyState title="No performance history available" description={`Trend lines for ${period.toLowerCase()} will appear after evaluated practice results are recorded.`}/></div>
+                <div className="performance-legend" aria-label="Chart categories"><span><i className="purple"/>Overall</span><span><i className="blue"/>Resume</span><span><i className="green"/>Technical</span><span><i className="amber"/>Behavioral</span></div>
             </section>
 
-
-            {/* Performance Statistics */}
-
-            <section className="performance-stats-grid">
-
-                <div className="performance-stat-card">
-
-                    <span>
-                        Technical Score
-                    </span>
-
-                    <strong>
-                        76%
-                    </strong>
-
-                    <small>
-                        Technical questions
-                    </small>
-
+            <section className="performance-panel">
+                <PanelHeading Icon={PieChart} title="Category Performance" description="Performance across preparation areas."/>
+                <div className="performance-category-empty">
+                    <EmptyState title="Category scores are unavailable" description="A category breakdown will appear when the application has evaluated performance data."/>
                 </div>
-
-
-                <div className="performance-stat-card">
-
-                    <span>
-                        Behavioral Score
-                    </span>
-
-                    <strong>
-                        81%
-                    </strong>
-
-                    <small>
-                        Behavioral questions
-                    </small>
-
-                </div>
-
-
-                <div className="performance-stat-card">
-
-                    <span>
-                        Communication
-                    </span>
-
-                    <strong>
-                        84%
-                    </strong>
-
-                    <small>
-                        Communication performance
-                    </small>
-
-                </div>
-
-
-                <div className="performance-stat-card">
-
-                    <span>
-                        Confidence
-                    </span>
-
-                    <strong>
-                        75%
-                    </strong>
-
-                    <small>
-                        Interview confidence
-                    </small>
-
-                </div>
-
+                <p className="performance-chart-note">Separate category scores are not a percentage distribution.</p>
             </section>
-
-
-            {/* Performance Breakdown */}
-
-            <section className="performance-section-card">
-
-                <div className="performance-section-header">
-
-                    <h2>
-                        Performance Breakdown
-                    </h2>
-
-                    <p>
-                        See how you are performing across important interview areas.
-                    </p>
-
-                </div>
-
-
-                <div className="performance-breakdown-list">
-
-                    <div className="performance-breakdown-item">
-
-                        <div className="performance-breakdown-info">
-
-                            <strong>
-                                Technical Knowledge
-                            </strong>
-
-                            <span>
-                                76%
-                            </span>
-
-                        </div>
-
-                        <div className="performance-progress">
-
-                            <div style={{ width: "76%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="performance-breakdown-item">
-
-                        <div className="performance-breakdown-info">
-
-                            <strong>
-                                Problem Solving
-                            </strong>
-
-                            <span>
-                                74%
-                            </span>
-
-                        </div>
-
-                        <div className="performance-progress">
-
-                            <div style={{ width: "74%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="performance-breakdown-item">
-
-                        <div className="performance-breakdown-info">
-
-                            <strong>
-                                Communication
-                            </strong>
-
-                            <span>
-                                84%
-                            </span>
-
-                        </div>
-
-                        <div className="performance-progress">
-
-                            <div style={{ width: "84%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="performance-breakdown-item">
-
-                        <div className="performance-breakdown-info">
-
-                            <strong>
-                                Behavioral Responses
-                            </strong>
-
-                            <span>
-                                81%
-                            </span>
-
-                        </div>
-
-                        <div className="performance-progress">
-
-                            <div style={{ width: "81%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="performance-breakdown-item">
-
-                        <div className="performance-breakdown-info">
-
-                            <strong>
-                                Answer Structure
-                            </strong>
-
-                            <span>
-                                79%
-                            </span>
-
-                        </div>
-
-                        <div className="performance-progress">
-
-                            <div style={{ width: "79%" }}></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Strengths and Improvements */}
-
-            <section className="performance-two-column">
-
-                <div className="performance-section-card">
-
-                    <div className="performance-section-header">
-
-                        <h2>
-                            Your Strengths
-                        </h2>
-
-                        <p>
-                            Areas where your performance is strong.
-                        </p>
-
-                    </div>
-
-
-                    <div className="performance-list">
-
-                        <div>
-                            ✓ Clear communication
-                        </div>
-
-                        <div>
-                            ✓ Good technical fundamentals
-                        </div>
-
-                        <div>
-                            ✓ Strong teamwork examples
-                        </div>
-
-                        <div>
-                            ✓ Structured answers
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div className="performance-section-card">
-
-                    <div className="performance-section-header">
-
-                        <h2>
-                            Areas to Improve
-                        </h2>
-
-                        <p>
-                            Areas that need more practice.
-                        </p>
-
-                    </div>
-
-
-                    <div className="performance-list">
-
-                        <div>
-                            ⚠ System design concepts
-                        </div>
-
-                        <div>
-                            ⚠ Problem-solving speed
-                        </div>
-
-                        <div>
-                            ⚠ Conflict management examples
-                        </div>
-
-                        <div>
-                            ⚠ Technical depth
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Recent Interview Performance */}
-
-            <section className="performance-section-card">
-
-                <div className="performance-section-header">
-
-                    <h2>
-                        Recent Interview Performance
-                    </h2>
-
-                    <p>
-                        Your scores from recent mock interviews.
-                    </p>
-
-                </div>
-
-
-                <div className="performance-table">
-
-                    <div className="performance-table-header">
-
-                        <span>
-                            Interview
-                        </span>
-
-                        <span>
-                            Type
-                        </span>
-
-                        <span>
-                            Score
-                        </span>
-
-                        <span>
-                            Status
-                        </span>
-
-                    </div>
-
-
-                    <div className="performance-table-row">
-
-                        <span>
-                            Interview 01
-                        </span>
-
-                        <span>
-                            Technical
-                        </span>
-
-                        <strong>
-                            82%
-                        </strong>
-
-                        <span>
-                            Completed
-                        </span>
-
-                    </div>
-
-
-                    <div className="performance-table-row">
-
-                        <span>
-                            Interview 02
-                        </span>
-
-                        <span>
-                            Behavioral
-                        </span>
-
-                        <strong>
-                            76%
-                        </strong>
-
-                        <span>
-                            Completed
-                        </span>
-
-                    </div>
-
-
-                    <div className="performance-table-row">
-
-                        <span>
-                            Interview 03
-                        </span>
-
-                        <span>
-                            Mixed
-                        </span>
-
-                        <strong>
-                            79%
-                        </strong>
-
-                        <span>
-                            Completed
-                        </span>
-
-                    </div>
-
-
-                    <div className="performance-table-row">
-
-                        <span>
-                            Interview 04
-                        </span>
-
-                        <span>
-                            Technical
-                        </span>
-
-                        <strong>
-                            82%
-                        </strong>
-
-                        <span>
-                            Completed
-                        </span>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Improvement Suggestions */}
-
-            <section className="performance-section-card">
-
-                <div className="performance-section-header">
-
-                    <h2>
-                        Improvement Suggestions
-                    </h2>
-
-                    <p>
-                        Recommendations based on your recent performance.
-                    </p>
-
-                </div>
-
-
-                <div className="performance-suggestion-grid">
-
-                    <div className="performance-suggestion">
-
-                        <h3>
-                            Practice System Design
-                        </h3>
-
-                        <p>
-                            Spend more time practicing architecture,
-                            scalability, and database design questions.
-                        </p>
-
-                    </div>
-
-
-                    <div className="performance-suggestion">
-
-                        <h3>
-                            Improve Answer Depth
-                        </h3>
-
-                        <p>
-                            Support your answers with specific examples,
-                            technical reasoning, and measurable outcomes.
-                        </p>
-
-                    </div>
-
-
-                    <div className="performance-suggestion">
-
-                        <h3>
-                            Practice Under Time Limits
-                        </h3>
-
-                        <p>
-                            Use timed practice sessions to improve your
-                            response speed and confidence.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
         </div>
-    );
+
+        <div className="performance-detail-grid">
+            <section className="performance-panel performance-detail-panel">
+                <PanelHeading Icon={BarChart3} title="Detailed Performance" description="Your performance breakdown by category and subtopics."/>
+                <div className="performance-tabs" role="tablist" aria-label="Performance category">
+                    {categories.map((category) => <button key={category} type="button" role="tab" aria-selected={activeCategory === category} className={activeCategory === category ? "active" : ""} onClick={() => setActiveCategory(category)}>{category}</button>)}
+                </div>
+                <div className="performance-table-wrap">
+                    <table className="performance-data-table">
+                        <thead><tr>{columns.map((column) => <th key={column}>{column}</th>)}</tr></thead>
+                        <tbody><tr><td colSpan={columns.length}><EmptyState title={`No ${activeCategory.toLowerCase()} results yet`} description="Evaluated records will appear here when available."/></td></tr></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <div className="performance-side-column">
+                <section className="performance-panel">
+                    <PanelHeading Icon={Target} title="Strengths & Weaknesses" description="Your strong areas and areas to focus on."/>
+                    <div className="performance-strength-grid">
+                        <div className="performance-strength-block strength"><h3>Strengths</h3><EmptyState title="Not enough data yet" description="Strengths will be identified from evaluated results."/></div>
+                        <div className="performance-strength-block weakness"><h3>Areas to Improve</h3><EmptyState title="Not enough data yet" description="Areas to improve will be based on your actual scores."/></div>
+                    </div>
+                </section>
+                <section className="performance-panel performance-activity-panel">
+                    <PanelHeading Icon={Clock3} title="Recent Activity" description="Your latest preparation activities."/>
+                    <EmptyState title="No recent activity" description="Completed sessions and analysis records will appear here."/>
+                </section>
+            </div>
+        </div>
+    </div>;
 }
 
 export default Performance;

@@ -12,29 +12,37 @@ body,
 }
 
 :root {
-    --bg-primary: #F8E7C9;
-    --bg-secondary: #F3DDB8;
-    --bg-sidebar: #064E3B;
-    --bg-card: #FFFFFF;
-    --bg-card-hover: #FFF8ED;
-    --border: #D8C5A5;
-    --border-light: #B8A485;
-    --text-primary: #000000;
-    --text-secondary: #333333;
-    --text-muted: #555555;
-    --purple: #064E3B;
-    --purple-light: #087451;
-    --blue: #064E3B;
-    --green: #064E3B;
-    --yellow: #F8E7C9;
+    --bg-primary: #070B14;
+    --bg-secondary: #111B2B;
+    --bg-sidebar: #080D18;
+    --bg-card: #0D1523;
+    --bg-card-hover: #111B2B;
+    --border: #202C40;
+    --border-light: #34445B;
+    --text-primary: #F1F5F9;
+    --text-secondary: #CBD5E1;
+    --text-muted: #94A3B8;
+    --purple: #7C4DFF;
+    --purple-light: #6D3DE8;
+    --blue: #38BDF8;
+    --green: #22C55E;
+    --yellow: #FBBF24;
     --red: #B42318;
-    --shadow: rgba(6, 78, 59, 0.14);
+    --shadow: rgba(0, 0, 0, 0.2);
     --sidebar-width: 250px;
     --topbar-height: 72px;
 }
 
 html {
+    color-scheme: dark;
+}
+
+html[data-resume-theme="light"] {
     color-scheme: light;
+}
+
+html[data-resume-theme="dark"] {
+    color-scheme: dark;
 }
 
 body,
@@ -42,7 +50,7 @@ button,
 input,
 textarea,
 select {
-    font-family: Arial, sans-serif;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 body {
@@ -57,14 +65,14 @@ button {
 input,
 textarea,
 select {
-    color: #000000;
-    background: #FFFFFF;
+    color: var(--text-primary);
+    background: var(--bg-card);
     border-color: var(--border);
 }
 
 input::placeholder,
 textarea::placeholder {
-    color: #666666;
+    color: var(--text-muted);
     opacity: 1;
 }
 
@@ -96,7 +104,7 @@ textarea::placeholder {
 .sidebar h1,
 .sidebar h2,
 .sidebar h3 {
-    color: #FFFFFF;
+    color: inherit;
 }
 
 .main-area {
@@ -121,6 +129,65 @@ textarea::placeholder {
     overflow-wrap: anywhere;
 }
 
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) { background: #070b14; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .app-layout,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .main-area,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .page-content { background: var(--bg-primary); color: var(--text-primary); }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar { background: var(--bg-sidebar); border-color: var(--border); }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-logo { color: #f1f5f9; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-title { color: #718198; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-section { margin-bottom: 18px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item { color: #a1afc2; text-decoration: none; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item svg { color: #8090a7; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item:hover { color: #f1f5f9; background: #111b2b; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item.active { color: #d5caff; background: #251b46; box-shadow: inset 2px 0 #8b65ff; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item.active svg { color: #ad96ff; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar { background: #080d18; border-color: #202c40; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .topbar-left h2 { color: #f1f5f9; font-size: 17px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .plan-button,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .notification-button { color: #cbd5e1; background: #0d1523; border-color: #202c40; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .user-name { color: #f1f5f9; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .user-email { color: #94a3b8; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-brand-mark { display: grid; place-items: center; width: 29px; height: 29px; border-radius: 8px; background: #7043e8; color: white; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-logo { display: flex; align-items: center; gap: 9px; font-size: 16px; font-weight: 700; letter-spacing: -.25px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-logo > span:last-child > span { color: #a78bfa; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-navigation { padding: 0 12px 16px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-section { margin: 22px 0; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-title { margin: 0 0 7px; padding: 0 9px; font-size: 9px; letter-spacing: .9px; font-weight: 700; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-item { min-height: 34px; display: flex; align-items: center; gap: 10px; margin: 2px 0; padding: 0 9px; border-radius: 7px; font-size: 11px; transition: color .16s ease, background .16s ease; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .sidebar-item svg { flex: 0 0 16px; stroke-width: 1.8; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-menu-wrap { position: relative; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile { border: 0; background: transparent; color: inherit; cursor: pointer; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-chevron { color: #8190a6; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile-menu { position: absolute; top: calc(100% + 9px); right: 0; z-index: 1200; display: grid; gap: 5px; width: 190px; padding: 12px; border: 1px solid #202c40; border-radius: 8px; background: #0d1523; color: #f1f5f9; box-shadow: 0 10px 24px #0005; font-size: 11px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile-menu span { color: #94a3b8; font-size: 10px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile-menu a { margin-top: 6px; color: #b8a4ff; text-decoration: none; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-header-theme { height: 34px; display: flex; align-items: center; gap: 6px; padding: 0 9px; border: 1px solid #202c40; border-radius: 7px; background: #0d1523; color: #cbd5e1; cursor: pointer; font-size: 11px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-header-theme svg { color: #c4b5fd; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-header-theme:focus-visible,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile:focus-visible,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .notification-button:focus-visible,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .plan-button:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-mobile-menu,
+body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-nav-backdrop { display: none; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page),
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .app-layout,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .main-area,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .page-content { background: #f5f7fb; color: #172033; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar { background: #fff; border-color: #e2e8f0; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-logo,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .topbar-left h2,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .user-name { color: #172033; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item { color: #64748b; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item:hover { color: #172033; background: #f1f5f9; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-item.active { color: #5b2ed0; background: #eee8ff; box-shadow: inset 2px 0 #6d3de8; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .plan-button,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .notification-button,
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-header-theme { color: #475569; background: #fff; border-color: #e2e8f0; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar .user-email { color: #64748b; }
+html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .user-profile-menu { color: #172033; background: #fff; border-color: #e2e8f0; box-shadow: 0 10px 24px #1720331c; }
+
 @media (max-width: 768px) {
      :root {
         --sidebar-width: 200px;
@@ -134,19 +201,20 @@ textarea::placeholder {
     .page-content {
         padding: 18px;
     }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) { --sidebar-width: 225px; }
 }
 
 @media (max-width: 520px) {
-     :root {
-        --sidebar-width: 68px;
-    }
-    .sidebar {
-        width: var(--sidebar-width);
-    }
-    .main-area {
-        margin-left: var(--sidebar-width);
-    }
-    .page-content {
-        padding: 12px;
-    }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) { --sidebar-width: 0px; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar { position: fixed; inset: 0 auto 0 0; z-index: 1101; width: 250px; height: 100dvh; overflow-y: auto; transform: translateX(-105%); transition: transform .2s ease; box-shadow: 12px 0 30px #0004; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar.mobile-open { transform: translateX(0); }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-logo,
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-sidebar .sidebar-navigation { display: block; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-nav-backdrop.open { display: block; position: fixed; inset: 0; z-index: 1100; border: 0; background: #020617a8; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-mobile-menu { position: fixed; left: 10px; top: 19px; z-index: 1001; width: 31px; height: 31px; padding: 7px; display: flex; flex-direction: column; justify-content: center; gap: 4px; border: 1px solid #26354c; border-radius: 6px; background: #0d1523; cursor: pointer; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-mobile-menu span { display: block; height: 1.5px; width: 100%; background: #cbd5e1; }
+    html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-mobile-menu { background: #fff; border-color: #e2e8f0; }
+    html[data-resume-theme="light"] body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-mobile-menu span { background: #475569; }
+    body:has(.resume-analysis-page, .dashboard-content, .job-description-page, .skill-gap-page, .mock-interviews-page, .technical-question-page, .behavioral-question-page, .progress-tracking-page, .performance-page, .readiness-report-page, .preparation-plan-page) .resume-topbar { padding-left: 50px; }
+    .page-content { padding: 12px; }
 }

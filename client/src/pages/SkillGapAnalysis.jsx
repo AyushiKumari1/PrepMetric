@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { AlertCircle, FileText, LoaderCircle, Target } from "lucide-react";
 import api from "../services/api";
 import "../styles/skillGapAnalysis.css";
 
@@ -6,39 +8,29 @@ function SkillGapAnalysis() {
     const [jobDescriptions, setJobDescriptions] = useState([]);
     const [selectedJobId, setSelectedJobId] = useState("");
     const [result, setResult] = useState(null);
-    const [loadingJobs, setLoadingJobs] = useState(false);
+    const [loadingJobs, setLoadingJobs] = useState(true);
     const [analyzing, setAnalyzing] = useState(false);
     const [message, setMessage] = useState("");
+    const [loadError, setLoadError] = useState("");
+
+    const loadJobDescriptions = async () => {
+        try {
+            setLoadingJobs(true);
+            setLoadError("");
+            const response = await api.get("/api/job-descriptions");
+            const jobs = response.data.jobDescriptions || [];
+            setJobDescriptions(jobs);
+            setSelectedJobId((current) => jobs.some((job) => job._id === current) ? current : jobs[0]?._id || "");
+        } catch (error) {
+            console.error("Load job descriptions error:", error);
+            setLoadError(error.response?.data?.message || "Could not load job descriptions. Check your backend connection.");
+        } finally {
+            setLoadingJobs(false);
+        }
+    };
 
     useEffect(() => {
-        const loadJobDescriptions = async () => {
-            try {
-                setLoadingJobs(true);
-
-                const response = await api.get("/api/job-descriptions");
-                const jobs = response.data.jobDescriptions || [];
-
-                setJobDescriptions(jobs);
-
-                if (jobs.length > 0) {
-                    setSelectedJobId(jobs[0]._id);
-                }
-            } catch (error) {
-                console.error("Load job descriptions error:", error);
-
-                if (error.response && error.response.data) {
-                    setMessage(error.response.data.message);
-                } else {
-                    setMessage(
-                        "Could not load job descriptions. Check your backend connection."
-                    );
-                }
-            } finally {
-                setLoadingJobs(false);
-            }
-        };
-
-        loadJobDescriptions();
+        Promise.resolve().then(loadJobDescriptions);
     }, []);
 
     const handleAnalyze = async () => {
@@ -132,19 +124,19 @@ function SkillGapAnalysis() {
     };
 
     return (
-        <div className="page-container">
+        <div className="page-container skill-gap-page">
             <div className="page-header skill-gap-page-header">
                 <h1 className="skill-gap-page-title">
                     Skill Gap Analysis
                 </h1>
                 <p>
-                    Compare your resume with a target job and discover
-                    which skills are supported by your resume evidence.
+                    Compare your resume with a target job and discover which skills are supported by your resume evidence.
                 </p>
             </div>
 
             <section className="skill-section-card">
                 <div className="skill-section-header">
+                    <span className="target-job-icon"><Target size={19}/></span>
                     <div>
                         <h2>Select Your Target Job</h2>
                         <p>
@@ -153,43 +145,17 @@ function SkillGapAnalysis() {
                     </div>
                 </div>
 
-                {loadingJobs ? (
-                    <p>Loading saved job descriptions...</p>
-                ) : (
-                    <select
-                        value={selectedJobId}
-                        onChange={(event) => {
-                            setSelectedJobId(event.target.value);
-                            setResult(null);
-                            setMessage("");
-                        }}
-                        disabled={jobDescriptions.length === 0 || analyzing}
-                        style={{
-                            width: "100%",
-                            padding: "12px",
-                            marginBottom: "16px",
-                            borderRadius: "8px"
-                        }}
-                    >
-                        <option value="">
-                            Select a job description
-                        </option>
-
-                        {jobDescriptions.map((job) => (
-                            <option key={job._id} value={job._id}>
-                                {job.title}
-                                {job.company ? " - " + job.company : ""}
-                            </option>
-                        ))}
+                <div className="skill-job-field">
+                    <label htmlFor="target-job-select">Select a job description</label>
+                    <select id="target-job-select" value={selectedJobId} onChange={(event) => { setSelectedJobId(event.target.value); setResult(null); setMessage(""); }} disabled={loadingJobs || !!loadError || jobDescriptions.length === 0 || analyzing}>
+                        <option value="">{loadingJobs ? "Loading saved job descriptions..." : "Select a job description"}</option>
+                        {jobDescriptions.map((job) => <option key={job._id} value={job._id}>{job.title}{job.company ? " — " + job.company : ""}</option>)}
                     </select>
-                )}
+                </div>
 
-                {!loadingJobs && jobDescriptions.length === 0 && (
-                    <p>
-                        No saved job descriptions found. Visit the Job
-                        Description page and save a job first.
-                    </p>
-                )}
+                {loadingJobs && <p className="skill-loading" role="status"><LoaderCircle size={15}/>Loading saved job descriptions...</p>}
+
+                {!loadingJobs && !loadError && jobDescriptions.length === 0 && <div className="skill-empty-state"><span><FileText size={21}/></span><p>No saved job descriptions found. Visit the Job Description page and save a job first.</p><Link to="/job-description">Go to Job Description</Link></div>}
 
                 <button
                     type="button"
@@ -198,23 +164,16 @@ function SkillGapAnalysis() {
                     disabled={
                         analyzing ||
                         loadingJobs ||
+                        !!loadError ||
                         !selectedJobId ||
                         jobDescriptions.length === 0
                     }
                 >
-                    {analyzing
-                        ? "Analyzing skills..."
-                        : "Analyze Skill Gaps"}
+                    {analyzing ? <><LoaderCircle className="skill-button-spinner" size={17}/>Analyzing skills...</> : "Analyze Skill Gaps"}
                 </button>
 
-                {message && (
-                    <p
-                        role="status"
-                        style={{ marginTop: "16px", overflowWrap: "anywhere" }}
-                    >
-                        {message}
-                    </p>
-                )}
+                {loadError && <div className="skill-alert" role="alert"><AlertCircle size={17}/><div><strong>Could not load job descriptions.</strong><p>{loadError}</p></div><button type="button" onClick={loadJobDescriptions} disabled={loadingJobs}>Retry</button></div>}
+                {message && <div className={`skill-alert ${result ? "success" : ""}`} role="status"><AlertCircle size={17}/><p>{message}</p></div>}
             </section>
 
             {result && (

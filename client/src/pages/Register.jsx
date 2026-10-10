@@ -9,6 +9,7 @@ function Register() {
     });
 
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -19,26 +20,22 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
+        setLoading(true);
+        setMessage("");
 
         try {
-            const response = await api.post(
+            await api.post(
                 "/api/auth/register",
                 formData
             );
 
-            const data = response.data;
-
             setMessage("Registration successful!");
-            console.log(data);
 
         } catch (error) {
-            console.error(error);
-
-            if (error.response) {
-                setMessage("Something went wrong");
-            } else {
-                setMessage("Something went wrong");
-            }
+            setMessage(error.response?.data?.message || "Unable to create your account. Check your connection and try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -54,6 +51,9 @@ function Register() {
                     type="text"
                     name="username"
                     placeholder="Username"
+                    aria-label="Username"
+                    autoComplete="username"
+                    required
                     value={formData.username}
                     onChange={handleChange}
                 />
@@ -62,6 +62,9 @@ function Register() {
                     type="email"
                     name="email"
                     placeholder="Email"
+                    aria-label="Email"
+                    autoComplete="email"
+                    required
                     value={formData.email}
                     onChange={handleChange}
                 />
@@ -70,12 +73,15 @@ function Register() {
                     type="password"
                     name="password"
                     placeholder="Password"
+                    aria-label="Password"
+                    autoComplete="new-password"
+                    required
                     value={formData.password}
                     onChange={handleChange}
                 />
 
-                <button type="submit">
-                    Register
+                <button type="submit" disabled={loading}>
+                    {loading ? "Creating account…" : "Register"}
                 </button>
 
             </form>

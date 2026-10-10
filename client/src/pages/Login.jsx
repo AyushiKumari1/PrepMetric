@@ -1,13 +1,17 @@
 import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import api from "../services/api";
 
 function Login() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [formData, setFormData] = useState({
         email: "",
         password: ""
     });
 
     const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,6 +22,9 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (loading) return;
+        setLoading(true);
+        setMessage("");
 
         try {
             const response = await api.post(
@@ -27,35 +34,23 @@ function Login() {
 
             const data = response.data;
 
-            setMessage("Login successful!");
-
             localStorage.setItem("token", data.token);
-
-            const token = localStorage.getItem("token");
-
-            const profileResponse = await fetch(
-                "/api/auth/profile",
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            );
-
-            const profileData = profileResponse.data;
-
-            console.log("Profile:", profileData);
-
-            console.log("Login successful");
+            try {
+                const profileResponse = await api.get("/api/auth/profile");
+                const user = profileResponse.data?.user;
+                if (user?.username) localStorage.setItem("username", user.username);
+                if (user?.email) localStorage.setItem("email", user.email);
+            } catch {
+                // A valid login token still allows the user to continue if profile lookup is temporarily unavailable.
+                localStorage.setItem("email", formData.email);
+            }
+            const destination = location.state?.from?.pathname || "/dashboard";
+            navigate(destination, { replace: true });
 
         } catch (error) {
-            console.error(error);
-
-            if (error.response) {
-            setMessage("Something went wrong");
-            } else {
-                setMessage("Something went wrong");
-            }
+            setMessage(error.response?.data?.message || "Unable to sign in. Check your connection and try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -71,6 +66,9 @@ function Login() {
                         type="email"
                         name="email"
                         placeholder="Email"
+                        aria-label="Email"
+                        autoComplete="email"
+                        required
                         value={formData.email}
                         onChange={handleChange}
                     />
@@ -79,12 +77,15 @@ function Login() {
                         type="password"
                         name="password"
                         placeholder="Password"
+                        aria-label="Password"
+                        autoComplete="current-password"
+                        required
                         value={formData.password}
                         onChange={handleChange}
                     />
 
-                    <button type="submit">
-                        Login
+                    <button type="submit" disabled={loading}>
+                        {loading ? "Signing in…" : "Login"}
                     </button>
 
                 </form>

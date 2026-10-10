@@ -1,173 +1,77 @@
-.page-container {
-    padding: 35px;
+.resume-analysis-page {
+    --ra-page: #070b14;
+    --ra-sidebar: #080d18;
+    --ra-card: #0d1523;
+    --ra-card-alt: #111b2b;
+    --ra-border: #202c40;
+    --ra-text: #f1f5f9;
+    --ra-muted: #94a3b8;
+    --ra-purple: #7c4dff;
+    --ra-green: #22c55e;
+    --ra-amber: #fbbf24;
+    width: 100%;
+    min-height: calc(100vh - var(--topbar-height));
+    padding: 20px 36px 36px;
+    background: var(--ra-page);
+    color: var(--ra-text);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    text-align: left;
 }
+:root[data-resume-theme="light"] .resume-analysis-page {
+    --ra-page: #f5f7fb;
+    --ra-sidebar: #ffffff;
+    --ra-card: #ffffff;
+    --ra-card-alt: #f8fafc;
+    --ra-border: #e2e8f0;
+    --ra-text: #172033;
+    --ra-muted: #64748b;
+    --ra-purple: #6d3de8;
+}
+.resume-analysis-page * { box-sizing: border-box; }
+.resume-intro { text-align: center; margin: 0 auto 22px; }
+.resume-intro h1 { margin: 0 0 6px; color: var(--ra-text); font-size: 23px; line-height: 1.35; font-weight: 650; letter-spacing: -.35px; }
+.resume-intro p { color: var(--ra-muted); font-size: 12px; line-height: 1.55; }
+.resume-upload-card { min-height: 238px; padding: 24px 20px 18px; margin: 0 auto 18px; max-width: 1100px; text-align: center; background: var(--ra-card); border: 1px dashed #35445d; border-radius: 10px; }
+:root[data-resume-theme="light"] .resume-upload-card { border-color: #cbd5e1; }
+.upload-icon { width: 43px; height: 43px; margin: 0 auto 10px; display: grid; place-items: center; border-radius: 11px; color: #b8a4ff; background: #20183d; }
+:root[data-resume-theme="light"] .upload-icon { color: #6d3de8; background: #f0ebff; }
+.resume-upload-card h2 { margin: 0 0 5px; color: var(--ra-text); font-size: 15px; line-height: 1.4; font-weight: 600; }
+.resume-upload-card > p { color: var(--ra-muted); font-size: 11px; margin: 0 0 13px; }
+.upload-button { min-height: 34px; display: inline-flex; align-items: center; justify-content: center; padding: 0 16px; border: 1px solid #825eff; border-radius: 6px; background: var(--ra-purple); color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; transition: background .16s ease, border-color .16s ease; }
+.upload-button:hover { background: #6d3de8; border-color: #6d3de8; }
+.upload-button:disabled { opacity: .7; cursor: wait; }
+.upload-button:focus-visible { outline: 2px solid #38bdf8; outline-offset: 3px; }
+.resume-upload-card small { display: block; margin-top: 10px; color: #75849a; font-size: 10px; }
+.resume-upload-card .selected-file, .resume-upload-card .upload-message { margin: 9px auto 0; max-width: 90%; overflow-wrap: anywhere; color: var(--ra-muted); font-size: 10px; }
+.resume-upload-card .upload-message.success { color: #4ade80; }.resume-upload-card .upload-message.error { color: #fca5a5; }
+.resume-upload-card .selected-file + .upload-message { margin-top: 4px; }
+.analysis-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; max-width: 1100px; margin: 0 auto 17px; }
+.resume-summary-card { display: flex; align-items: flex-start; gap: 13px; min-height: 128px; padding: 17px 18px; background: var(--ra-card); border: 1px solid var(--ra-border); border-radius: 9px; }
+.resume-summary-icon { display: grid; place-items: center; width: 37px; height: 37px; flex: 0 0 37px; border-radius: 8px; }
+.resume-summary-icon.purple { color: #b8a4ff; background: #20183d; }.resume-summary-icon.green { color: #4ade80; background: #10291e; }.resume-summary-icon.amber { color: #fbbf24; background: #2b2417; }
+:root[data-resume-theme="light"] .resume-summary-icon.purple { color: #6d3de8; background: #f0ebff; }:root[data-resume-theme="light"] .resume-summary-icon.green { color: #15803d; background: #e9f8ee; }:root[data-resume-theme="light"] .resume-summary-icon.amber { color: #b77908; background: #fff6db; }
+.resume-summary-copy { min-width: 0; display: grid; grid-template-columns: 1fr auto; align-items: baseline; column-gap: 8px; width: 100%; }
+.resume-summary-copy > span { color: var(--ra-muted); font-size: 11px; font-weight: 550; }
+.resume-summary-copy > strong { grid-column: 1 / -1; color: var(--ra-text); font-size: 25px; font-weight: 650; line-height: 1.25; margin: 5px 0 3px; letter-spacing: -.4px; }
+.resume-summary-copy p { grid-column: 1 / -1; color: var(--ra-muted); font-size: 10px; line-height: 1.45; }
+.resume-analysis-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; max-width: 1100px; margin: 0 auto 17px; }
+.resume-card { min-width: 0; padding: 17px 19px; border: 1px solid var(--ra-border); border-radius: 9px; background: var(--ra-card); }
+.resume-card h2 { margin: 0 0 11px; color: var(--ra-text); font-size: 14px; line-height: 1.4; font-weight: 600; }
+.insight-card { min-height: 202px; }
+.analysis-list { display: flex; flex-direction: column; }
+.analysis-empty { padding: 24px 4px; color: var(--ra-muted); font-size: 11px; line-height: 1.5; }
+.analysis-list-item { min-height: 35px; display: flex; align-items: center; gap: 9px; padding: 7px 0; border-bottom: 1px solid color-mix(in srgb, var(--ra-border), transparent 25%); color: var(--ra-text); font-size: 11px; }
+.analysis-list-item:last-child { border-bottom: 0; }
+.analysis-list-item svg { flex: 0 0 16px; }.analysis-list-item svg.positive { color: var(--ra-green); }.analysis-list-item svg.warning { color: var(--ra-amber); }
+.recommendations-card { max-width: 1100px; margin: 0 auto; padding: 17px 19px 10px; }
+.recommendations-card h2 { margin-bottom: 4px; }
+.recommendations-card > p { color: var(--ra-muted); font-size: 10px; line-height: 1.5; margin-bottom: 9px; }
+.recommendation-item { display: flex; gap: 10px; align-items: center; min-height: 49px; padding: 8px 0; border-top: 1px solid color-mix(in srgb, var(--ra-border), transparent 25%); }
+.recommendation-number { width: 21px; height: 21px; flex: 0 0 21px; border-radius: 50%; display: grid; place-items: center; color: #d7caff; background: #251b46; font-size: 10px; font-weight: 650; }
+:root[data-resume-theme="light"] .recommendation-number { color: #5b2ed0; background: #eee8ff; }
+.recommendation-item > div:last-child { min-width: 0; display: grid; gap: 2px; }
+.recommendation-item strong { color: var(--ra-text); font-size: 10.5px; font-weight: 600; }
+.recommendation-item span { color: var(--ra-muted); font-size: 10px; line-height: 1.4; }
 
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    font-size: 28px;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
-
-.page-header p {
-    color: #6b7280;
-    font-size: 15px;
-}
-
-.resume-upload-card {
-    background: #ffffff;
-    border: 1px dashed #cbd5e1;
-    border-radius: 12px;
-    padding: 45px 30px;
-    text-align: center;
-    margin-bottom: 25px;
-}
-
-.upload-icon {
-    font-size: 42px;
-    margin-bottom: 15px;
-}
-
-.resume-upload-card h2 {
-    font-size: 20px;
-    margin-bottom: 8px;
-}
-
-.resume-upload-card p {
-    color: #6b7280;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-.upload-button {
-    border: none;
-    background: #111827;
-    color: #ffffff;
-    padding: 10px 18px;
-    border-radius: 7px;
-    font-size: 14px;
-    cursor: pointer;
-    display: block;
-    margin: 0 auto 10px;
-}
-
-.upload-button:hover {
-    opacity: 0.9;
-}
-
-.resume-upload-card small {
-    color: #9ca3af;
-    font-size: 12px;
-}
-
-.analysis-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.analysis-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 22px;
-}
-
-.analysis-label {
-    display: block;
-    color: #6b7280;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.analysis-score {
-    display: block;
-    font-size: 30px;
-    margin-bottom: 7px;
-}
-
-.analysis-card p {
-    color: #9ca3af;
-    font-size: 12px;
-}
-
-.resume-analysis-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 25px;
-}
-
-.resume-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 24px;
-}
-
-.resume-card h2 {
-    font-size: 17px;
-    font-weight: 600;
-    margin-bottom: 18px;
-}
-
-.analysis-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.analysis-list-item {
-    padding: 12px 0;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 14px;
-}
-
-.analysis-list-item:last-child {
-    border-bottom: none;
-}
-
-.recommendations-card {
-    margin-bottom: 30px;
-}
-
-.recommendations-card>p {
-    color: #6b7280;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-.recommendation-item {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    padding: 15px 0;
-    border-top: 1px solid #f0f0f0;
-}
-
-.recommendation-item strong {
-    font-size: 14px;
-}
-
-.recommendation-item span {
-    color: #6b7280;
-    font-size: 13px;
-}
-
-@media (max-width: 900px) {
-    .analysis-grid {
-        grid-template-columns: 1fr;
-    }
-    .resume-analysis-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 700px) {
-    .page-container {
-        padding: 20px;
-    }
-}
+@media (max-width: 1100px) { .resume-analysis-page { padding: 18px 24px 30px; }.resume-upload-card, .analysis-grid, .resume-analysis-grid, .recommendations-card { max-width: 900px; }.analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }.resume-summary-card:last-child { grid-column: 1 / -1; } }
+@media (max-width: 700px) { .resume-analysis-page { padding: 16px 14px 28px; }.resume-intro { margin-bottom: 17px; }.resume-intro h1 { font-size: 21px; }.resume-intro p { font-size: 11px; }.resume-upload-card { min-height: 220px; padding: 22px 14px 16px; }.analysis-grid, .resume-analysis-grid { grid-template-columns: 1fr; gap: 10px; }.resume-summary-card:last-child { grid-column: auto; }.resume-summary-card { min-height: 105px; padding: 15px; }.insight-card { min-height: auto; }.resume-card { padding: 16px; }.recommendation-item { align-items: flex-start; } }

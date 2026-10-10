@@ -1,456 +1,93 @@
+import { useState } from "react";
+import {
+    AlertCircle, BarChart3, Brain, CalendarClock, CheckCircle2,
+    Code2, FileText, Goal, PieChart, Target,
+} from "lucide-react";
 import "../styles/progressTracking.css";
 
+const categories = [
+    { label: "Overall Progress", Icon: Target, color: "purple" },
+    { label: "Resume Analysis", Icon: FileText, color: "blue" },
+    { label: "Technical Practice", Icon: Code2, color: "green" },
+    { label: "Behavioral Practice", Icon: Brain, color: "amber" },
+];
+const categoryBreakdown = [
+    { label: "Technical Skills", color: "purple" },
+    { label: "Behavioral Skills", color: "blue" },
+    { label: "Resume & Profile", color: "green" },
+    { label: "Skill Gap Analysis", color: "amber" },
+];
+
+function SummaryCard({ label, Icon, color }) {
+    return <article className="tracking-summary-card">
+        <div className="tracking-summary-top"><span className={`tracking-icon ${color}`}><Icon size={17}/></span><span>{label}</span></div>
+        <strong className="tracking-summary-value">—</strong>
+        <div className="tracking-progress-track" role="progressbar" aria-label={`${label} progress unavailable`} aria-valuemin="0" aria-valuemax="100" aria-valuetext="Not enough data yet"><span style={{ width: 0 }}/></div>
+        <small>Not enough data yet</small>
+    </article>;
+}
+
+function PanelHeading({ Icon, title, description, action }) {
+    return <div className="tracking-panel-heading">
+        <span className="tracking-panel-icon"><Icon size={17}/></span>
+        <div className="tracking-heading-copy"><h2>{title}</h2><p>{description}</p></div>
+        {action}
+    </div>;
+}
+
+function EmptyState({ title, description }) {
+    return <div className="tracking-empty-state">
+        <span><AlertCircle size={19}/></span><strong>{title}</strong><p>{description}</p>
+    </div>;
+}
+
 function ProgressTracking() {
-    return (
-        <div className="page-container">
+    const [period, setPeriod] = useState("Last 8 Weeks");
+    const [goalMessage, setGoalMessage] = useState("");
 
-            {/* Page Header */}
+    return <div className="page-container progress-tracking-page">
+        <header className="page-header tracking-page-header">
+            <h1>Progress Tracking</h1>
+            <p>Track your preparation progress and stay on top of your interview readiness journey.</p>
+        </header>
 
-            <div className="page-header">
-                <h1>Progress Tracking</h1>
+        <section className="tracking-summary-grid" aria-label="Preparation progress summary">
+            {categories.map(({ label, Icon, color }) => <SummaryCard key={label} label={label} Icon={Icon} color={color}/>)}
+        </section>
 
-                <p>
-                    Track your interview preparation progress and see
-                    how your performance improves over time.
-                </p>
-            </div>
-
-
-            {/* Overall Progress */}
-
-            <section className="progress-overview-card">
-
-                <div className="progress-overview-header">
-
-                    <div>
-                        <span className="progress-label">
-                            Overall Preparation
-                        </span>
-
-                        <h2>
-                            72%
-                        </h2>
-
-                        <p>
-                            Your overall preparation progress.
-                        </p>
-                    </div>
-
-                    <div className="progress-status">
-                        On Track
-                    </div>
-
-                </div>
-
-
-                <div className="overall-progress-bar">
-
-                    <div
-                        className="overall-progress-fill"
-                        style={{ width: "72%" }}
-                    ></div>
-
-                </div>
-
+        <div className="tracking-chart-grid">
+            <section className="tracking-panel overview-panel">
+                <PanelHeading Icon={BarChart3} title="Progress Overview" description="Your preparation progress across different areas."
+                    action={<label className="tracking-period"> <span className="sr-only">Chart period</span><select value={period} onChange={(event) => setPeriod(event.target.value)}><option>Last 8 Weeks</option><option>Last 4 Weeks</option><option>Last 12 Weeks</option></select></label>}/>
+                <EmptyState title="No progress history available" description="Weekly progress will appear here when the app records preparation history."/>
             </section>
 
-
-            {/* Progress Statistics */}
-
-            <section className="progress-stats-grid">
-
-                <div className="progress-stat-card">
-
-                    <span>
-                        Questions Practiced
-                    </span>
-
-                    <strong>
-                        80
-                    </strong>
-
-                    <small>
-                        Technical + behavioral
-                    </small>
-
+            <section className="tracking-panel category-panel">
+                <PanelHeading Icon={PieChart} title="Skill Category Progress" description="Your progress in different skill categories."/>
+                <div className="tracking-category-layout">
+                    <div className="tracking-donut-placeholder" aria-label="No category progress data"><span>—</span><small>Overall</small></div>
+                    <div className="tracking-category-list">{categoryBreakdown.map((item) => <div className="tracking-category-row" key={item.label}><span className={`tracking-legend-dot ${item.color}`}/><span>{item.label}</span><strong>—</strong></div>)}</div>
                 </div>
-
-
-                <div className="progress-stat-card">
-
-                    <span>
-                        Interviews Completed
-                    </span>
-
-                    <strong>
-                        4
-                    </strong>
-
-                    <small>
-                        Mock interview sessions
-                    </small>
-
-                </div>
-
-
-                <div className="progress-stat-card">
-
-                    <span>
-                        Skills Covered
-                    </span>
-
-                    <strong>
-                        18/25
-                    </strong>
-
-                    <small>
-                        Target role skills
-                    </small>
-
-                </div>
-
-
-                <div className="progress-stat-card">
-
-                    <span>
-                        Practice Hours
-                    </span>
-
-                    <strong>
-                        12h
-                    </strong>
-
-                    <small>
-                        Total practice time
-                    </small>
-
-                </div>
-
+                <p className="tracking-data-note">Category scores are not available yet.</p>
             </section>
-
-
-            {/* Preparation Progress */}
-
-            <section className="progress-section-card">
-
-                <div className="progress-section-header">
-
-                    <div>
-                        <h2>
-                            Preparation Progress
-                        </h2>
-
-                        <p>
-                            Track progress across each preparation area.
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <div className="preparation-progress-list">
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Resume Analysis
-                            </strong>
-
-                            <span>
-                                90%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "90%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Job Description
-                            </strong>
-
-                            <span>
-                                80%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "80%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Skill Gap Analysis
-                            </strong>
-
-                            <span>
-                                72%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "72%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Technical Questions
-                            </strong>
-
-                            <span>
-                                76%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "76%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Behavioral Questions
-                            </strong>
-
-                            <span>
-                                81%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "81%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="preparation-progress-item">
-
-                        <div className="preparation-progress-info">
-
-                            <strong>
-                                Mock Interviews
-                            </strong>
-
-                            <span>
-                                65%
-                            </span>
-
-                        </div>
-
-                        <div className="preparation-progress-bar">
-
-                            <div
-                                style={{ width: "65%" }}
-                            ></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Weekly Activity */}
-
-            <section className="progress-section-card">
-
-                <div className="progress-section-header">
-
-                    <h2>
-                        Weekly Activity
-                    </h2>
-
-                    <p>
-                        Your interview preparation activity during the week.
-                    </p>
-
-                </div>
-
-
-                <div className="weekly-activity">
-
-                    <div className="activity-day">
-                        <span>Mon</span>
-                        <div style={{ height: "45%" }}></div>
-                        <small>45m</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Tue</span>
-                        <div style={{ height: "70%" }}></div>
-                        <small>1h</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Wed</span>
-                        <div style={{ height: "55%" }}></div>
-                        <small>50m</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Thu</span>
-                        <div style={{ height: "85%" }}></div>
-                        <small>1h 20m</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Fri</span>
-                        <div style={{ height: "60%" }}></div>
-                        <small>55m</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Sat</span>
-                        <div style={{ height: "90%" }}></div>
-                        <small>1h 30m</small>
-                    </div>
-
-                    <div className="activity-day">
-                        <span>Sun</span>
-                        <div style={{ height: "35%" }}></div>
-                        <small>30m</small>
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Recent Milestones */}
-
-            <section className="progress-section-card">
-
-                <div className="progress-section-header">
-
-                    <h2>
-                        Recent Milestones
-                    </h2>
-
-                    <p>
-                        Important achievements in your preparation journey.
-                    </p>
-
-                </div>
-
-
-                <div className="milestone-list">
-
-                    <div className="milestone-item">
-
-                        <div className="milestone-icon">
-                            ✓
-                        </div>
-
-                        <div>
-                            <strong>
-                                Completed first mock interview
-                            </strong>
-
-                            <span>
-                                You completed your first AI-powered interview.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div className="milestone-item">
-
-                        <div className="milestone-icon">
-                            ✓
-                        </div>
-
-                        <div>
-                            <strong>
-                                Practiced 50 questions
-                            </strong>
-
-                            <span>
-                                You have crossed 50 interview questions.
-                            </span>
-                        </div>
-
-                    </div>
-
-
-                    <div className="milestone-item">
-
-                        <div className="milestone-icon">
-                            ✓
-                        </div>
-
-                        <div>
-                            <strong>
-                                Reached 70% preparation
-                            </strong>
-
-                            <span>
-                                Your overall preparation has reached 70%.
-                            </span>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
         </div>
-    );
+
+        <div className="tracking-lower-grid">
+            <section className="tracking-panel">
+                <PanelHeading Icon={CalendarClock} title="Recent Activity" description="Your latest preparation activities."
+                    action={<span className="tracking-unavailable-action">History unavailable</span>}/>
+                <EmptyState title="No recent activity" description="Completed practice and analysis activity will appear here when recorded."/>
+            </section>
+
+            <section className="tracking-panel">
+                <PanelHeading Icon={Goal} title="Upcoming Goals" description="Set and track your preparation goals."
+                    action={<button className="tracking-secondary-button" type="button" onClick={() => setGoalMessage("Goal management is not connected in this prototype yet.")}>Manage Goals</button>}/>
+                <EmptyState title="No goals have been added" description="Your saved goals and completion progress will appear here."/>
+                {goalMessage && <p className="tracking-status" role="status">{goalMessage}</p>}
+            </section>
+        </div>
+        <p className="tracking-source-note"><CheckCircle2 size={14}/> Progress displays real recorded data when available. No sample history or goals are shown.</p>
+    </div>;
 }
 
 export default ProgressTracking;

@@ -1,567 +1,94 @@
+import { Link } from "react-router-dom";
+import {
+    AlertCircle, ArrowRight, BookOpenCheck, CalendarDays, CheckCircle2,
+    Clock3, Code2, FileCheck2, Flame, Goal, Map, MessageSquareText,
+    Target, UsersRound,
+} from "lucide-react";
 import "../styles/preparationPlan.css";
 
+const metrics = [
+    { label: "Tasks Completed", value: "—", note: "No saved task data", Icon: CheckCircle2, color: "purple" },
+    { label: "Tasks Remaining", value: "—", note: "No saved task data", Icon: BookOpenCheck, color: "blue" },
+    { label: "Practice Hours", value: "—", note: "Time tracking unavailable", Icon: Clock3, color: "green" },
+    { label: "Current Streak", value: "—", note: "Streak tracking unavailable", Icon: Flame, color: "amber" },
+];
+const modules = [
+    { title: "Resume Analysis", description: "Review your resume and explore supported feedback.", to: "/resume-analysis", Icon: FileCheck2, color: "purple" },
+    { title: "Technical Questions", description: "Choose a topic and difficulty for technical practice.", to: "/technical-question", Icon: Code2, color: "blue" },
+    { title: "Behavioral Questions", description: "Explore behavioral question focus areas.", to: "/behavioral-question", Icon: UsersRound, color: "green" },
+    { title: "Mock Interviews", description: "View the mock interview practice options.", to: "/mock-interviews", Icon: MessageSquareText, color: "amber" },
+];
+const roadmap = [
+    { title: "Resume Preparation", description: "Analyze and improve your resume.", to: "/resume-analysis", Icon: FileCheck2 },
+    { title: "Job & Skill Analysis", description: "Review job requirements and skill matches.", to: "/skill-gap-analysis", Icon: Target },
+    { title: "Technical Preparation", description: "Practice technical concepts and questions.", to: "/technical-question", Icon: Code2 },
+    { title: "Behavioral Preparation", description: "Practice behavioral questions and STAR responses.", to: "/behavioral-question", Icon: UsersRound },
+    { title: "Mock Interviews", description: "Explore realistic interview practice.", to: "/mock-interviews", Icon: MessageSquareText },
+];
+const weekStartDate = new Date();
+weekStartDate.setDate(weekStartDate.getDate() - ((weekStartDate.getDay() + 6) % 7));
+const weekEndDate = new Date(weekStartDate);
+weekEndDate.setDate(weekEndDate.getDate() + 6);
+const dateFormat = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" });
+const dateLabels = {
+    today: dateFormat.format(new Date()),
+    range: `${dateFormat.format(weekStartDate)} – ${dateFormat.format(weekEndDate)}`,
+};
+
+function EmptyState({ title, description }) {
+    return <div className="plan-empty-state"><span><AlertCircle size={18}/></span><strong>{title}</strong><p>{description}</p></div>;
+}
+
+function MetricCard({ label, value, note, Icon, color }) {
+    return <article className="plan-metric-card">
+        <div className="plan-metric-heading"><span className={`plan-icon-tile ${color}`}><Icon size={17}/></span><span>{label}</span></div>
+        <strong className="plan-metric-value">{value}</strong><small>{note}</small>
+        <div className="plan-metric-track" role="progressbar" aria-label={`${label} unavailable`} aria-valuemin="0" aria-valuemax="100" aria-valuetext="Not enough data yet"><span style={{ width: 0 }}/></div>
+    </article>;
+}
+
 function PreparationPlan() {
-    return (
-        <div className="page-container">
+    return <div className="page-container preparation-plan-page">
+        <header className="page-header plan-page-header">
+            <h1>Preparation Plan</h1>
+            <p>Follow your personalized preparation roadmap and stay on track for your target interview.</p>
+        </header>
 
-            {/* Page Header */}
-
-            <div className="page-header">
-                <h1>Preparation Plan</h1>
-
-                <p>
-                    Follow your personalized preparation roadmap and
-                    stay on track for your target interview.
-                </p>
+        <section className="plan-overview-card">
+            <div className="plan-overview-main">
+                <span className="plan-overview-icon"><Map size={20}/></span>
+                <div className="plan-overview-copy"><span className="plan-eyebrow">YOUR PREPARATION PLAN</span><h2>Target role not set</h2><span className="plan-personalized-badge">Plan data unavailable</span><p>A saved target role and preparation plan are not available in this prototype.</p></div>
             </div>
+            <div className="plan-completion-summary"><strong>—</strong><span>Plan Completed</span></div>
+            <div className="plan-completion-track" role="progressbar" aria-label="Plan completion unavailable" aria-valuemin="0" aria-valuemax="100" aria-valuetext="No preparation plan data yet"><span style={{ width: 0 }}/></div>
+        </section>
 
+        <section className="plan-metrics-grid" aria-label="Preparation plan metrics">{metrics.map((metric) => <MetricCard key={metric.label} {...metric}/>)}</section>
 
-            {/* Plan Overview */}
-
-            <section className="plan-overview-card">
-
-                <div className="plan-overview-content">
-
-                    <div>
-                        <span className="plan-label">
-                            Your Preparation Plan
-                        </span>
-
-                        <h2>
-                            Full Stack Developer
-                        </h2>
-
-                        <p>
-                            Personalized preparation plan based on your
-                            target role and current readiness.
-                        </p>
-                    </div>
-
-
-                    <div className="plan-progress-summary">
-
-                        <strong>
-                            72%
-                        </strong>
-
-                        <span>
-                            Plan Completed
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div className="plan-progress-bar">
-
-                    <div
-                        className="plan-progress-fill"
-                        style={{ width: "72%" }}
-                    ></div>
-
-                </div>
-
+        <div className="plan-content-grid">
+            <section className="plan-panel">
+                <div className="plan-panel-heading"><span className="plan-panel-icon"><CalendarDays size={17}/></span><div><h2>Today's Preparation</h2><p>Complete these tasks to stay on track.</p></div><span className="plan-date-label">Today · {dateLabels.today}</span></div>
+                <EmptyState title="No preparation tasks saved for today" description="Your daily checklist and completion state are not connected in this prototype."/>
+                <div className="plan-module-links">{modules.map(({ title, description, to, Icon, color }) => <Link to={to} className="plan-module-link" key={title}><span className={`plan-icon-tile ${color}`}><Icon size={15}/></span><span className="plan-module-copy"><strong>{title}</strong><small>{description}</small></span><ArrowRight size={14}/></Link>)}</div>
             </section>
 
-
-            {/* Plan Statistics */}
-
-            <section className="plan-stats-grid">
-
-                <div className="plan-stat-card">
-
-                    <span>
-                        Tasks Completed
-                    </span>
-
-                    <strong>
-                        18
-                    </strong>
-
-                    <small>
-                        Out of 25 tasks
-                    </small>
-
-                </div>
-
-
-                <div className="plan-stat-card">
-
-                    <span>
-                        Tasks Remaining
-                    </span>
-
-                    <strong>
-                        7
-                    </strong>
-
-                    <small>
-                        Tasks in your plan
-                    </small>
-
-                </div>
-
-
-                <div className="plan-stat-card">
-
-                    <span>
-                        Practice Hours
-                    </span>
-
-                    <strong>
-                        12h
-                    </strong>
-
-                    <small>
-                        Completed this plan
-                    </small>
-
-                </div>
-
-
-                <div className="plan-stat-card">
-
-                    <span>
-                        Current Streak
-                    </span>
-
-                    <strong>
-                        5 Days
-                    </strong>
-
-                    <small>
-                        Keep practicing consistently
-                    </small>
-
-                </div>
-
+            <section className="plan-panel">
+                <div className="plan-panel-heading"><span className="plan-panel-icon"><Goal size={17}/></span><div><h2>Weekly Goals</h2><p>Your preparation targets for this week.</p></div></div>
+                <p className="plan-week-label">Current week · {dateLabels.range}</p>
+                <EmptyState title="No weekly goals have been configured" description="Goal targets and completion values are not available yet."/>
             </section>
-
-
-            {/* Today's Preparation */}
-
-            <section className="plan-section-card">
-
-                <div className="plan-section-header">
-
-                    <div>
-                        <h2>
-                            Today's Preparation
-                        </h2>
-
-                        <p>
-                            Complete these tasks to stay on track.
-                        </p>
-                    </div>
-
-                    <span className="today-badge">
-                        Today
-                    </span>
-
-                </div>
-
-
-                <div className="today-task-list">
-
-                    <div className="today-task">
-
-                        <div className="task-check">
-                            ✓
-                        </div>
-
-                        <div className="task-content">
-
-                            <strong>
-                                Review Resume Recommendations
-                            </strong>
-
-                            <span>
-                                Improve your professional summary and achievements.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            20 min
-                        </small>
-
-                    </div>
-
-
-                    <div className="today-task">
-
-                        <div className="task-check">
-                            ✓
-                        </div>
-
-                        <div className="task-content">
-
-                            <strong>
-                                Practice Technical Questions
-                            </strong>
-
-                            <span>
-                                Complete 10 JavaScript and React questions.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            30 min
-                        </small>
-
-                    </div>
-
-
-                    <div className="today-task">
-
-                        <div className="task-check">
-                            ○
-                        </div>
-
-                        <div className="task-content">
-
-                            <strong>
-                                Practice Behavioral Questions
-                            </strong>
-
-                            <span>
-                                Practice teamwork and conflict-management questions.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            20 min
-                        </small>
-
-                    </div>
-
-
-                    <div className="today-task">
-
-                        <div className="task-check">
-                            ○
-                        </div>
-
-                        <div className="task-content">
-
-                            <strong>
-                                Complete a Mock Interview
-                            </strong>
-
-                            <span>
-                                Complete one mixed AI-powered mock interview.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            30 min
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Preparation Roadmap */}
-
-            <section className="plan-section-card">
-
-                <div className="plan-section-header">
-
-                    <h2>
-                        Preparation Roadmap
-                    </h2>
-
-                    <p>
-                        Follow these stages to complete your preparation.
-                    </p>
-
-                </div>
-
-
-                <div className="roadmap-list">
-
-                    <div className="roadmap-item completed">
-
-                        <div className="roadmap-number">
-                            ✓
-                        </div>
-
-                        <div className="roadmap-content">
-
-                            <strong>
-                                Resume Preparation
-                            </strong>
-
-                            <span>
-                                Analyze and improve your resume.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            Completed
-                        </small>
-
-                    </div>
-
-
-                    <div className="roadmap-item completed">
-
-                        <div className="roadmap-number">
-                            ✓
-                        </div>
-
-                        <div className="roadmap-content">
-
-                            <strong>
-                                Job & Skill Analysis
-                            </strong>
-
-                            <span>
-                                Understand job requirements and identify skill gaps.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            Completed
-                        </small>
-
-                    </div>
-
-
-                    <div className="roadmap-item active">
-
-                        <div className="roadmap-number">
-                            3
-                        </div>
-
-                        <div className="roadmap-content">
-
-                            <strong>
-                                Technical Preparation
-                            </strong>
-
-                            <span>
-                                Practice technical concepts and interview questions.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            In Progress
-                        </small>
-
-                    </div>
-
-
-                    <div className="roadmap-item">
-
-                        <div className="roadmap-number">
-                            4
-                        </div>
-
-                        <div className="roadmap-content">
-
-                            <strong>
-                                Behavioral Preparation
-                            </strong>
-
-                            <span>
-                                Practice behavioral questions and STAR responses.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            Upcoming
-                        </small>
-
-                    </div>
-
-
-                    <div className="roadmap-item">
-
-                        <div className="roadmap-number">
-                            5
-                        </div>
-
-                        <div className="roadmap-content">
-
-                            <strong>
-                                Mock Interviews
-                            </strong>
-
-                            <span>
-                                Complete realistic interview simulations.
-                            </span>
-
-                        </div>
-
-                        <small>
-                            Upcoming
-                        </small>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* Weekly Goals */}
-
-            <section className="plan-section-card">
-
-                <div className="plan-section-header">
-
-                    <h2>
-                        Weekly Goals
-                    </h2>
-
-                    <p>
-                        Your preparation targets for this week.
-                    </p>
-
-                </div>
-
-
-                <div className="weekly-goals-grid">
-
-                    <div className="weekly-goal">
-
-                        <span>
-                            Technical Questions
-                        </span>
-
-                        <strong>
-                            18 / 25
-                        </strong>
-
-                        <div className="goal-progress">
-
-                            <div style={{ width: "72%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="weekly-goal">
-
-                        <span>
-                            Behavioral Questions
-                        </span>
-
-                        <strong>
-                            12 / 15
-                        </strong>
-
-                        <div className="goal-progress">
-
-                            <div style={{ width: "80%" }}></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div className="weekly-goal">
-
-                        <span>
-                            Practice Hours
-                        </span>
-
-                        <strong>
-                            4 / 5 hrs
-                        </strong>
-
-                        <div className="goal-progress">
-
-                            <div style={{ width: "80%" }}></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            {/* AI Recommendations */}
-
-            <section className="plan-section-card">
-
-                <div className="plan-section-header">
-
-                    <h2>
-                        AI Recommendations
-                    </h2>
-
-                    <p>
-                        Suggestions based on your current preparation progress.
-                    </p>
-
-                </div>
-
-
-                <div className="plan-recommendation-grid">
-
-                    <div className="plan-recommendation">
-
-                        <h3>
-                            Focus on System Design
-                        </h3>
-
-                        <p>
-                            Your skill-gap analysis shows that system design
-                            needs additional practice.
-                        </p>
-
-                    </div>
-
-
-                    <div className="plan-recommendation">
-
-                        <h3>
-                            Complete More Mock Interviews
-                        </h3>
-
-                        <p>
-                            Additional interview simulations can help improve
-                            confidence and answer quality.
-                        </p>
-
-                    </div>
-
-
-                    <div className="plan-recommendation">
-
-                        <h3>
-                            Maintain Your Practice Streak
-                        </h3>
-
-                        <p>
-                            Consistent daily practice will help you complete
-                            your preparation plan faster.
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
         </div>
-    );
+
+        <section className="plan-panel plan-roadmap-panel">
+            <div className="plan-panel-heading"><span className="plan-panel-icon"><Map size={17}/></span><div><h2>Preparation Roadmap</h2><p>Suggested module order; stage completion is not currently tracked.</p></div><span className="plan-role-placeholder">Target role: Not set</span></div>
+            <div className="plan-roadmap-grid">{roadmap.map(({ title, description, to, Icon }, index) => <article className="plan-roadmap-stage" key={title}>
+                <div className="plan-roadmap-marker">{index + 1}</div>
+                <span className="plan-roadmap-icon"><Icon size={16}/></span>
+                <h3>{title}</h3><p>{description}</p><span className="plan-stage-status">Status not tracked</span>
+                <Link to={to}>Open module <ArrowRight size={12}/></Link>
+            </article>)}</div>
+        </section>
+    </div>;
 }
 
 export default PreparationPlan;
